@@ -108,16 +108,16 @@ integers.
 #### `RegArray.datetime`
 
 Checks whether the array element is a date and/or time. `Date` values
-are vacuously valid; strings will be parsed using `Date.parse` (i.e.,
-RFC2822 or ISO 8601 format).
+are vacuously valid; other values will be parsed using `Date.parse`
+(i.e., RFC2822 or ISO 8601 format).
 
 ### Object Methods
 
 #### `test(array)`
 
 Checks if `array` conforms to `expression`, using the appropriate
-validator functions, returning a boolean.
+validator functions, returning a `Boolean`.
 
 #### `toString()`
 
-Returns `expression` defined in the constructor.
+Returns `expression`, defined in the constructor.
