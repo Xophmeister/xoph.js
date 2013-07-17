@@ -2,15 +2,15 @@
   // Predefined validators
   var validators = {
     numeric: function(data) {
-      return true;
+      return !isNaN(parseFloat(data)) && isFinite(data);
     },
 
     integer: function(data) {
-      return true;
+      return this.numeric(data) && data == parseInt(data, 10);
     },
 
     datetime: function(data) {
-      return true;
+      return data instanceof Date || this.integer(Date.parse(data)) || false;
     }
   };
 
