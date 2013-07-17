@@ -16,8 +16,7 @@ The `expression` is a string that defines how an array's elements must
 be patterned. It consists of quantified 'atoms', delineated by
 whitespace, which correspond to an array's index.
 
-The language is as follows (see the [Grammar](#grammar) section for more
-details):
+Briefly, the language is as follows:
 
 * **Names** refer to specific validations that are applied against a
   respective element. Their naming follows the same standard as
@@ -38,7 +37,7 @@ details):
  `*`        | ...may appear any number of times (including none at all).
 
 For example `id string{2} (string numeric?)+` would validate an array
-that had the following structure:
+that has the following structure:
 
  Index | Data
  :---: | ----
@@ -51,6 +50,9 @@ that had the following structure:
  6     | `'c'`
  7     | `2.718`
 
+Presuming the `id` validator function passes `34` (i.e., `id(34) ==
+true`).
+
 #### `validators`
 
 The `validators` parameter is optional and is used to specify element
@@ -58,9 +60,9 @@ validator functions. It should be a plain object with members having
 identifiers matching those referenced in `expression`.
 
 If the parameter is omitted, then the engine will only have access to
-its internal (i.e., predefined) validators. You *may* override these,
-but that would be bad practice. A better solution would be to alias the
-internal validators to your own identifiers.
+its internal (i.e., [predefined](#internal-validators)) validators. You
+*may* override these, but that would be bad practice. A better solution
+would be to alias the internal validators to your own identifiers.
 
 For example:
 
@@ -119,8 +121,3 @@ validator functions, returning a boolean.
 #### `toString()`
 
 Returns `expression` defined in the constructor.
-
-<a name="grammar" />
-## Grammar
-
-[TODO]
