@@ -86,7 +86,7 @@
       throw new TypeError('Expression must be a string');
     }
 
-    var v   = Object.create(validators), // "Copy" presets
+    var v   = Object.create(validators),  // "Copy" presets
         lex = [],
         ast = [];
 
@@ -179,8 +179,48 @@
       }
 
       // Recursive descent parser
-      (function parse(sub) {
-        // TODO
+      ast = (function parse(subset) {
+        var branch = [],
+            i = 0, j;
+
+        while (i < subset.length) {
+          switch (subset[i].type) {
+            case 'name':
+              branch.push(node(subset[i].value, subset[i].quantity));
+              ++i;
+              break;
+
+            case 'group':
+              if (!subset[i].value) {
+                // We should never see a group closing
+                throw new Error('Parser found unmatched group closing');
+              }
+
+              // Determine width of group
+              for (j = subset.length - 1; j > i; --j) {
+                if (subset[j].type == 'group' && !subset[j].value) {
+                  // Found group close at j
+                  branch.push(node(parse(subset.slice(i, j)), subset[j].quantity));
+                  break;
+                }
+              }
+
+              /* FIXME
+              if (!found) {
+                // Unbalanced parentheses
+                throw new Error('Parser found unmatched group opening');
+              }
+              */
+
+              i = j + 1;
+              break;
+
+            default:
+              throw new Error('Parser found unknown token type: ' + subset[i].type);
+              break;
+          }
+        }
+        return branch;
       })(tokens);
     })(lex);
 
