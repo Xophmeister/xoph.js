@@ -16,7 +16,8 @@ The `expression` is a string that defines how an array's elements must
 be patterned. It consists of quantified 'atoms', delineated by
 whitespace, which correspond to an array's index.
 
-Briefly, the language is as follows:
+Briefly, the language is as follows (see the [Grammar](#grammar) section
+for a technical description).
 
 * **Names** refer to specific validations that are applied against a
   respective element. Their naming follows the same standard as
@@ -121,3 +122,18 @@ validator functions, returning a `Boolean`.
 #### `toString()`
 
 Returns `expression`, defined in the constructor.
+
+## Grammar
+
+The EBNF for the language is as follows:
+
+```ebnf
+expression      = {quantified atom};
+quantified atom = (atom | group), [quantifier];
+group           = '(', expression, ')';
+atom            = 'list' | 'of' | 'symbols';
+quantifier      = '*' | '+' | '?' | '{', natural, [',', natural], '}';
+natural         = non-zero, {digit};
+non-zero        = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+digit           = non-zero | '0';
+```
