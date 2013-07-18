@@ -142,22 +142,22 @@ digit           = non-zero | '0';
 ![expression](ebnf/expression.png)
 
 ### `quantified atom`
-![quantified atom](ebnf/quantified-atom.png)
+![expression](ebnf/quantified-atom.png)
 
 ### `group`
-![group](ebnf/group.png)
+![expression](ebnf/group.png)
 
 ### `atom`
-![atom](ebnf/atom.png)
+![expression](ebnf/atom.png)
 
 ### `quantifier`
-![quantifier](ebnf/quantifier.png)
+![expression](ebnf/quantifier.png)
 
 ### `natural`
-![natural](ebnf/natural.png)
+![expression](ebnf/natural.png)
 
 ### `non-zero`
-![non-zero](ebnf/non-zero.png)
+![expression](ebnf/non-zero.png)
 
 ### `digit`
-![digit](ebnf/digit.png)
+![expression](ebnf/digit.png)
