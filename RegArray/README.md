@@ -13,23 +13,39 @@ sake of consistency. It expects one or two arguments:
 #### `expression`
 
 The `expression` is a string that defines how an array's elements must
-be patterned. It consists of quantified 'atoms', delineated by
-whitespace, which correspond to an array's index.
+be patterned. It consists of a sequence of, potentially quantified,
+elements that correspond to an array's index. A formal specification of
+the language can be found in the [Grammar](#grammar) section, but
+broadly:
 
-Briefly, the language is as follows (see the [Grammar](#grammar) section
-for a technical description).
+##### Validators
 
-* **Names** refer to specific validations that are applied against a
-  respective element. Their naming follows the same standard as
-  JavaScript identifiers (excluding Unicode): case-sensitive; must start
-  with a letter, `$` or `_`; followed by any number of word characters.
+The atomic units of an expression, which are ultimately used to validate
+array elements, are the identifiers of validator functions. Their naming
+follows the same standard as JavaScript identifiers (excluding Unicode):
 
-* **Groups** allow collections of atoms to be quantified and nested
-  within parentheses.
+* Case-sensitive;
+* Must start with a (Latin) letter, `$` or `_`;
+* Can be followed by any number of word (`/\w/`) characters.
 
-* **Quantifiers** specify the number of times an atom should occur:
+##### Groups
 
- Quantifier | The preceding atom...
+Expressions can be nested, collected together and quantified within
+parentheses.
+
+##### Alternations
+
+Expressions can be grouped into a disjunction to allow for alternations
+for any index validation, rather than having to write more complex
+validator functions. This is done by interposing expressions (simple or
+complex) with `|` characters.
+
+##### Quantifiers
+
+Expressions can be defined to occur a specific number of times by
+suffixing any of the following:
+
+ Quantifier | The preceding expression...
  ---------- | ---------------------
  `{n}`      | ...must appear exactly `n` times. By default, if a quantifier is omitted, the engine assumes `{1}`.
  `{n,m}`    | ...must appear between `n` and `m` times (inclusive). Note that `m` must be greater than `n`.
@@ -37,22 +53,43 @@ for a technical description).
  `+`        | ...must appear at least once.
  `*`        | ...may appear any number of times (including none at all).
 
-For example `id string{2} (string numeric?)+` would validate an array
-that has the following structure:
+##### Anchors
 
- Index | Data
- :---: | ----
- 0     | `34`
- 1     | `'foo'`
- 2     | `'bar'`
- 3     | `'a'`
- 4     | `'b'`
- 5     | `3.141`
- 6     | `'c'`
- 7     | `2.718`
+By default, the engine will start checking from the first (0th) index of
+an array. If you wish to anchor your expression about then `n`th index,
+you can start with `@n`.
 
-Presuming the `id` validator function passes `34` (i.e., `id(34) ==
-true`).
+##### Comments
+
+Comments can be included in the expression by preceding them with `#`.
+They are then defined up until the next `\n`.
+
+##### Example
+
+If the following validators are defined, with obvious meanings:
+
+* `integer`
+* `string`
+* `datetime`
+
+...then this expression:
+
+```
+@1 integer+ # Number(s) from [1]
+string{2} (string datetime?)*
+```
+
+...would evaluate the following array structures as:
+
+ Index | Valid   | Valid        | Invalid
+ :---: | ------- | ------------ | -------
+ 0     | `null`  | `[1, 2]`     | `1`
+ 1     | `5`     | `1`          | `2`
+ 2     | `9`     | `'Hello'`    | `false`
+ 3     | `'foo'` | `'World'`    |
+ 4     | `'bar'` | `'boop'`     |
+ 5     |         | `'doot'`     |
+ 6     |         | `1981-09-25` |
 
 #### `validators`
 
