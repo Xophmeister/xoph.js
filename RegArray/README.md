@@ -161,3 +161,5 @@ digit           = non-zero | '0';
 
 ### `digit`
 ![expression](ebnf/digit.png)
+
+*Diagrams created using [tabatkins/railroad-diagrams](https://github.com/tabatkins/railroad-diagrams)*
