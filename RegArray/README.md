@@ -204,24 +204,24 @@ expression   = {alternation};
 ```
 
 ### `anchor`
-![anchor](ebnf/anchor.svg)
+![anchor](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/anchor.svg)
 
 ### `quantifier`
-![quantifier](ebnf/quantifier.svg)
+![quantifier](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/quantifier.svg)
 
 ### `validator`
-![validator](ebnf/validator.svg)
+![validator](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/validator.svg)
 
 ### `group`
-![group](ebnf/group.svg)
+![group](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/group.svg)
 
 ### `atom`
-![atom](ebnf/atom.svg)
+![atom](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/atom.svg)
 
 ### `alternation`
-![alternation](ebnf/alternation.svg)
+![alternation](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/alternation.svg)
 
 ### `expression`
-![expression](ebnf/expression.svg)
+![expression](https://rawgithub.com/Xophmeister/xoph.js/parseng/RegArray/ebnf/expression.svg)
 
 *Diagrams created using [tabatkins/railroad-diagrams](https://github.com/tabatkins/railroad-diagrams).*
