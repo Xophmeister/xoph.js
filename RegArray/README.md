@@ -56,13 +56,31 @@ suffixing any of the following:
 ##### Anchors
 
 By default, the engine will start checking from the first (0th) index of
-an array. If you wish to anchor your expression about then `n`th index,
-you can start with `@n`.
+an array. If you wish to anchor an expression from elsewhere, you can
+prefix it with:
+
+ Anchor | From and including...
+ ------ | ---------------------
+ `>n`   | ...the `n`th index from the start.
+ `<n`   | ...the `n`th index from the end.
+
+Note that these do not function in the same way as anchors in regular
+expressions.
+
+Moreover, it is clear that one *could* write syntactically
+valid expressions that are conflated and, thus, would never validate an
+input array. For example:
+
+* `numeric+ >0 isNull` would validate arrays with one or more numeric
+  elements, from the beginning, where the first element is null. This
+  could never happen.
+* `<0 numeric{2}` would validate arrays with two numeric elements in the
+  last and last-plus-one (which doesn't exist) indices.
 
 ##### Comments
 
 Comments can be included in the expression by preceding them with `#`.
-They are then defined up until the next `\n`.
+They are then defined up until the next new line character(s).
 
 ##### Example
 
@@ -75,7 +93,7 @@ If the following validators are defined, with obvious meanings:
 ...then this expression:
 
 ```
-@1 integer+ # Number(s) from [1]
+>1 integer+ # Number(s) from [1]
 string{2} (string datetime?)*
 ```
 
@@ -165,38 +183,45 @@ Returns `expression`, defined in the constructor.
 The EBNF for the language is as follows:
 
 ```ebnf
-expression      = {quantified atom};
-quantified atom = (atom | group), [quantifier];
-group           = '(', expression, ')';
-atom            = 'list' | 'of' | 'symbols';
-quantifier      = '*' | '+' | '?' | '{', natural, [',', natural], '}';
-natural         = non-zero, {digit};
-non-zero        = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
-digit           = non-zero | '0';
+whitespace   = ? any whitespace character ?;                       (* Not lexed *)
+comment      = '#', {? any printable character ? - ? new line ?};  (* Not lexed *)
+
+non-zero     = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+digit        = non-zero | '0';
+positive     = non-zero, {digit};
+non-negative = ('0' | positive);
+
+anchor       = ('<' | '>'), non-negative;
+
+quantifier   = '*' | '+' | '?' | '{', non-negative, [',', positive], '}';
+
+validator    = list | of | validator | identifiers;
+group        = '(', expression, ')';
+atom         = [anchor], (validator | group), [quantifier];
+
+alternation  = atom, {'|', atom};
+expression   = {alternation};
 ```
 
-### `expression`
-![expression](ebnf/expression.png)
-
-### `quantified atom`
-![expression](ebnf/quantified-atom.png)
-
-### `group`
-![expression](ebnf/group.png)
-
-### `atom`
-![expression](ebnf/atom.png)
+### `anchor`
+![anchor](ebnf/anchor.svg)
 
 ### `quantifier`
-![expression](ebnf/quantifier.png)
+![quantifier](ebnf/quantifier.svg)
 
-### `natural`
-![expression](ebnf/natural.png)
+### `validator`
+![validator](ebnf/validator.svg)
 
-### `non-zero`
-![expression](ebnf/non-zero.png)
+### `group`
+![group](ebnf/group.svg)
 
-### `digit`
-![expression](ebnf/digit.png)
+### `atom`
+![atom](ebnf/atom.svg)
 
-*Diagrams created using [tabatkins/railroad-diagrams](https://github.com/tabatkins/railroad-diagrams)*
+### `alternation`
+![alternation](ebnf/alternation.svg)
+
+### `expression`
+![expression](ebnf/expression.svg)
+
+*Diagrams created using [tabatkins/railroad-diagrams](https://github.com/tabatkins/railroad-diagrams).*
